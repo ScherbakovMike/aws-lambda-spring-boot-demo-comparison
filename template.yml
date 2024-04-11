@@ -12,12 +12,12 @@ Globals:
     MemorySize: 512
 
 Resources:
-  AWSSpringBootFunction:
+  AWSSpringBootGraalVMFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: .
-      Handler: com.mikescherbakov.awslambdaspringbootdemocomparison.aws.LambdaStreamHandler::handleRequest
-      Runtime: java21
+      Handler: not.used.in.provided.runtime
+      CodeUri: aws/lambda/dist/aws-lambda-spring-boot-demo-comparison_aarch64.zip
+      Runtime: provided.al2023
       Architectures:
         - arm64
       MemorySize: 512
@@ -33,7 +33,7 @@ Resources:
             TableName: !Ref DynamoTable
 
       Events:
-        AWSSpringBoot:
+        AWSSpringBootGraalVM:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
@@ -55,15 +55,15 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  AWSSpringBootFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for AWSSpringBoot function"
+  AWSSpringBootGraalVMFunctionApi:
+    Description: "API Gateway endpoint URL for Prod stage for AWSSpringBootGraalVM function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
-  AWSSpringBootFunction:
-    Description: "AWSSpringBoot Lambda Function ARN"
-    Value: !GetAtt AWSSpringBootFunction.Arn
-  AWSSpringBootFunctionIamRole:
-    Description: "Implicit IAM Role created for AWSSpringBoot function"
-    Value: !GetAtt AWSSpringBootFunctionRole.Arn
-  AWSSpringBootDynamoDbTable:
+  AWSSpringBootGraalVMFunction:
+    Description: "AWSSpringBootGraalVM Lambda Function ARN"
+    Value: !GetAtt AWSSpringBootGraalVMFunction.Arn
+  AWSSpringBootGraalVMFunctionIamRole:
+    Description: "Implicit IAM Role created for AWSSpringBootGraalVM function"
+    Value: !GetAtt AWSSpringBootGraalVMFunctionRole.Arn
+  AWSSpringBootGraalVMDynamoDbTable:
     Value: !Ref DynamoTable
     Description: DynamoDb Table

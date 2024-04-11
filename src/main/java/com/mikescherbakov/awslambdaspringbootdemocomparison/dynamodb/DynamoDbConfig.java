@@ -1,5 +1,7 @@
 package com.mikescherbakov.awslambdaspringbootdemocomparison.dynamodb;
 
+import static software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTags.primaryPartitionKey;
+
 import com.mikescherbakov.awslambdaspringbootdemocomparison.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +11,7 @@ import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsPro
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.StaticTableSchema;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
@@ -37,6 +40,15 @@ public class DynamoDbConfig {
 
   @Bean
   public DynamoDbAsyncTable<User> userTable(DynamoDbEnhancedAsyncClient dynamoDbClient) {
-    return dynamoDbClient.table(userTableName, TableSchema.fromBean(User.class));
+    return dynamoDbClient.table(userTableName, TABLE_SCHEMA);
   }
+
+  private static final TableSchema<User> TABLE_SCHEMA =
+      StaticTableSchema.builder(User.class)
+          .newItemSupplier(User::new)
+          .addAttribute(String.class, a -> a.name("id")
+              .getter(User::getId)
+              .setter(User::setId)
+              .tags(primaryPartitionKey()))
+          .build();
 }
