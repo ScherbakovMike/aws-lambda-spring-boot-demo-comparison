@@ -1,6 +1,6 @@
 ## Configuration parameters
 
-SnapStart: false
+SnapStart: true
 
 ## Deployment
 
