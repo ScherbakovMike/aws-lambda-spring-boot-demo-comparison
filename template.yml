@@ -12,12 +12,12 @@ Globals:
     MemorySize: 512
 
 Resources:
-  AWSCloudFunctionFunction:
+  AWSCloudFunctionGraalVmFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: .
-      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
-      Runtime: java21
+      Handler: not.used.in.provided.runtime
+      CodeUri: aws/lambda/dist/aws-lambda-spring-boot-demo-comparison_aarch64.zip
+      Runtime: provided.al2023
       Architectures:
         - arm64
       MemorySize: 512
@@ -34,7 +34,7 @@ Resources:
             TableName: !Ref DynamoTable
 
       Events:
-        AWSCloudFunction:
+        AWSCloudFunctionGraalVm:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
@@ -56,15 +56,15 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  AWSCloudFunctionFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for AWSCloudFunction function"
+  AWSCloudFunctionGraalVmFunctionApi:
+    Description: "API Gateway endpoint URL for Prod stage for AWSCloudFunctionGraalVm function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
-  AWSCloudFunctionFunction:
-    Description: "AWSCloudFunction Lambda Function ARN"
-    Value: !GetAtt AWSCloudFunctionFunction.Arn
-  AWSCloudFunctionFunctionIamRole:
-    Description: "Implicit IAM Role created for AWSCloudFunction function"
-    Value: !GetAtt AWSCloudFunctionFunctionRole.Arn
-  AWSCloudFunctionDynamoDbTable:
+  AWSCloudFunctionGraalVmFunction:
+    Description: "AWSCloudFunctionGraalVm Lambda Function ARN"
+    Value: !GetAtt AWSCloudFunctionGraalVmFunction.Arn
+  AWSCloudFunctionGraalVmFunctionIamRole:
+    Description: "Implicit IAM Role created for AWSCloudFunctionGraalVm function"
+    Value: !GetAtt AWSCloudFunctionGraalVmFunctionRole.Arn
+  AWSCloudFunctionGraalVmDynamoDbTable:
     Value: !Ref DynamoTable
     Description: DynamoDb Table

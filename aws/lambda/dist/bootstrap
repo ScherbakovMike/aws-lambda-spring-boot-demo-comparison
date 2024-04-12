@@ -1,0 +1,4 @@
+#!/bin/sh
+cd ${LAMBDA_TASK_ROOT:-.}
+set -euo pipefail
+./aws-lambda-spring-boot-demo-comparison
