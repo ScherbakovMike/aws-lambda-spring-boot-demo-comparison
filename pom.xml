@@ -15,16 +15,17 @@
   <name>aws-lambda-spring-boot-demo-comparison</name>
   <description>aws-lambda-spring-boot-demo-comparison</description>
   <properties>
+    <wrapper.version>1.0.27.RELEASE</wrapper.version>
+    <spring-cloud-function.version>4.1.2-SNAPSHOT</spring-cloud-function.version>
     <java.version>21</java.version>
     <aws.java.sdk.version>2.23.4</aws.java.sdk.version>
     <aws-serverless-java-container-springboot3.version>2.0.1</aws-serverless-java-container-springboot3.version>
-    <wrapper.version>1.0.27.RELEASE</wrapper.version>
-    <ecs-logging-java.version>1.6.0</ecs-logging-java.version>
   </properties>
+
   <dependencies>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-function-adapter-aws</artifactId>
     </dependency>
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
@@ -32,14 +33,8 @@
       <version>${aws.java.sdk.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.amazonaws.serverless</groupId>
-      <artifactId>aws-serverless-java-container-springboot3</artifactId>
-      <version>${aws-serverless-java-container-springboot3.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>co.elastic.logging</groupId>
-      <artifactId>logback-ecs-encoder</artifactId>
-      <version>${ecs-logging-java.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -47,16 +42,23 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <scope>annotationProcessor</scope>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-function-dependencies</artifactId>
+        <version>${spring-cloud-function.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -101,11 +103,39 @@
       </plugin>
     </plugins>
   </build>
+
   <repositories>
     <repository>
-      <id>maven</id>
-      <url>https://repo.maven.apache.org/maven2/</url>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/libs-snapshot-local</url>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/libs-milestone-local</url>
+    </repository>
+    <repository>
+      <id>spring-releases</id>
+      <name>Spring Releases</name>
+      <url>https://repo.spring.io/release</url>
     </repository>
   </repositories>
-
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/libs-snapshot-local</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/libs-milestone-local</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-releases</id>
+      <name>Spring Releases</name>
+      <url>https://repo.spring.io/libs-release-local</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

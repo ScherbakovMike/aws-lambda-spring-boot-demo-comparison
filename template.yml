@@ -12,11 +12,11 @@ Globals:
     MemorySize: 512
 
 Resources:
-  AWSSpringBootFunction:
+  AWSCloudFunctionFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: com.mikescherbakov.awslambdaspringbootdemocomparison.aws.LambdaStreamHandler::handleRequest
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
       Runtime: java21
       Architectures:
         - arm64
@@ -26,6 +26,7 @@ Resources:
       Environment:
         Variables:
           DatabaseTable: !Ref DynamoTable
+          MAIN_CLASS: com.mikescherbakov.awslambdaspringbootdemocomparison.AwsLambdaSpringBootDemoComparisonApplication
       Policies:
         ## Read more about SAM Policy templates at:
         ## https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
@@ -33,7 +34,7 @@ Resources:
             TableName: !Ref DynamoTable
 
       Events:
-        AWSSpringBoot:
+        AWSCloudFunction:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
@@ -55,15 +56,15 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  AWSSpringBootFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for AWSSpringBoot function"
+  AWSCloudFunctionFunctionApi:
+    Description: "API Gateway endpoint URL for Prod stage for AWSCloudFunction function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
-  AWSSpringBootFunction:
-    Description: "AWSSpringBoot Lambda Function ARN"
-    Value: !GetAtt AWSSpringBootFunction.Arn
-  AWSSpringBootFunctionIamRole:
-    Description: "Implicit IAM Role created for AWSSpringBoot function"
-    Value: !GetAtt AWSSpringBootFunctionRole.Arn
-  AWSSpringBootDynamoDbTable:
+  AWSCloudFunctionFunction:
+    Description: "AWSCloudFunction Lambda Function ARN"
+    Value: !GetAtt AWSCloudFunctionFunction.Arn
+  AWSCloudFunctionFunctionIamRole:
+    Description: "Implicit IAM Role created for AWSCloudFunction function"
+    Value: !GetAtt AWSCloudFunctionFunctionRole.Arn
+  AWSCloudFunctionDynamoDbTable:
     Value: !Ref DynamoTable
     Description: DynamoDb Table
