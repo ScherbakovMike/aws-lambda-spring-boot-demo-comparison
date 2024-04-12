@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
@@ -27,7 +27,7 @@ public class DynamoDbConfig {
     var region = Region.US_EAST_1;
     return DynamoDbAsyncClient.builder()
         .region(region)
-        .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+        .credentialsProvider(DefaultCredentialsProvider.create())
         .build();
   }
 
