@@ -12,17 +12,18 @@ Globals:
     MemorySize: 512
 
 Resources:
-  AWSCloudFunctionFunction:
+  AWSCloudFunctionSnapStartFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
       Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
       Runtime: java21
       Architectures:
-        - arm64
+        - x86_64
       MemorySize: 512
-#      SnapStart:
-#        ApplyOn: "PublishedVersions"
+      SnapStart:
+        ApplyOn: PublishedVersions
+      AutoPublishAlias: SnapStart
       Environment:
         Variables:
           DatabaseTable: !Ref DynamoTable
@@ -34,7 +35,7 @@ Resources:
             TableName: !Ref DynamoTable
 
       Events:
-        AWSCloudFunction:
+        AWSCloudFunctionSnapStart:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /{proxy+}
@@ -56,15 +57,15 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  AWSCloudFunctionFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for AWSCloudFunction function"
+  AWSCloudFunctionSnapStartFunctionApi:
+    Description: "API Gateway endpoint URL for Prod stage for AWSCloudFunctionSnapStart function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
-  AWSCloudFunctionFunction:
-    Description: "AWSCloudFunction Lambda Function ARN"
-    Value: !GetAtt AWSCloudFunctionFunction.Arn
-  AWSCloudFunctionFunctionIamRole:
-    Description: "Implicit IAM Role created for AWSCloudFunction function"
-    Value: !GetAtt AWSCloudFunctionFunctionRole.Arn
-  AWSCloudFunctionDynamoDbTable:
+  AWSCloudFunctionSnapStartFunction:
+    Description: "AWSCloudFunctionSnapStart Lambda Function ARN"
+    Value: !GetAtt AWSCloudFunctionSnapStartFunction.Arn
+  AWSCloudFunctionSnapStartFunctionIamRole:
+    Description: "Implicit IAM Role created for AWSCloudFunctionSnapStart function"
+    Value: !GetAtt AWSCloudFunctionSnapStartFunctionRole.Arn
+  AWSCloudFunctionSnapStartDynamoDbTable:
     Value: !Ref DynamoTable
     Description: DynamoDb Table
