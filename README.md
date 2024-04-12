@@ -1,6 +1,6 @@
 ## Configuration parameters
 
-SnapStart: false
+GraalVM: true
 
 ## Build
 
@@ -10,6 +10,7 @@ SnapStart: false
 ## Deployment
 
     cd aws/lambda/dist
+    chmod +x ./compile.sh
     ./compile.sh
     cd ../../../
     sam build
